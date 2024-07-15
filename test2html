@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase Product Display</title>
+ 
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    #fetch-products-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+    
+    .product-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 10px;
+        width: 200px;
+        text-align: left;
+    }
+    
+    .product-card h3 {
+        margin-top: 0;
+    }
+    
+    .product-card button {
+        margin-top: 10px;
+    }
+</style>
+    
+</head>
+<body>
+    <div class="container">
+        <button id="fetch-products-btn">Fetch Products</button>
+        <div id="product-container" class="product-container"></div>
+    </div>
+    
+    <script>
+        document.getElementById('fetch-products-btn').addActionListener('click', fetchProducts);
+
+function fetchProducts() {
+    // Mock product data
+    const products = [
+        { id: 1, name: 'Product 1', description: 'Description for product 1', price: 100 },
+        { id: 2, name: 'Product 2', description: 'Description for product 2', price: 150 },
+        { id: 3, name: 'Product 3', description: 'Description for product 3', price: 200 },
+    ];
+
+    // Simulate an API call with a Promise
+    new Promise((resolve) => {
+        setTimeout(() => resolve(products), 1000);
+    })
+    .then((products) => {
+        displayProducts(products);
+    });
+}
+
+function displayProducts(products) {
+    const productContainer = document.getElementById('product-container');
+    productContainer.innerHTML = ''; // Clear any existing products
+
+    products.forEach(product => {
+        const { id, name, price, description } = product; // Destructure product details
+
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+
+        productCard.innerHTML = `
+            <h3>${name}</h3>
+            <p>Price: $${price}</p>
+            <p id="desc-${id}" class="product-description" style="display:none;">${description}</p>
+            <button onclick="showDescription(${id})">Show Description</button>
+        `;
+
+        productContainer.appendChild(productCard);
+    });
+}
+
+function showDescription(id) {
+    const description = document.getElementById(`desc-${id}`);
+    if (description.style.display === 'none') {
+        description.style.display = 'block';
+    } else {
+        description.style.display = 'none';
+    }
+}
+
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
